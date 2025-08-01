@@ -1,0 +1,357 @@
+/* Signup.css */
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: #0a0a0a;
+    color: #ffffff;
+    min-height: 100vh;
+  }
+  
+  /* Main container */
+  .signup-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Background text */
+  .signup-container::before {
+    content: "VOCALYST";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 15vw;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.07);
+    letter-spacing: -0.05em;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+  
+  /* Card container */
+  .signup-card {
+    width: 100%;
+    max-width: 380px;
+    padding: 32px 28px;
+    background: rgba(18, 18, 18, 0.95);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Brand name */
+  .brand-name {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 32px;
+    color: #ffffff;
+    letter-spacing: -0.8px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Title */
+  .signup-title {
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 28px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+  }
+  
+  /* Google button */
+  .google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+  
+  .google-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+  }
+  
+  .google-icon {
+    flex-shrink: 0;
+  }
+  
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 14px;
+  }
+  
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .divider-text {
+    padding: 0 16px;
+  }
+  
+  /* Form styles */
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  
+  /* Form group */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  /* Form labels */
+  .form-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e0e0e0;
+    margin-bottom: 4px;
+  }
+  
+  /* Form inputs */
+  .form-input {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 400;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+  }
+  
+  .form-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .form-input:focus {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  }
+  
+  .form-input:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.07);
+  }
+  
+  /* Checkbox group */
+  .checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+  }
+  
+  .checkbox-input {
+    margin-top: 2px;
+    accent-color: #6366f1;
+    cursor: pointer;
+  }
+  
+  .checkbox-label {
+    cursor: pointer;
+    flex: 1;
+  }
+  
+  /* Submit button */
+  .submit-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: rgb(56, 56, 56);
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .submit-btn:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #000000 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(169, 147, 147, 0.4);
+  }
+  
+  .submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  }
+  
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .submit-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Footer text */
+  .footer-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Links */
+  .link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  .link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+  
+  /* Toast container styles */
+  .Toastify__toast-container {
+    font-family: inherit;
+  }
+  
+  .Toastify__toast {
+    background: rgba(18, 18, 18, 0.95);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .Toastify__toast--success {
+    border-left: 4px solid #10b981;
+  }
+  
+  .Toastify__toast--error {
+    border-left: 4px solid #ef4444;
+  }
+  
+  /* Focus visible for accessibility */
+  .form-input:focus-visible,
+  .submit-btn:focus-visible,
+  .google-btn:focus-visible,
+  .link:focus-visible {
+    outline: 2px solid #676363;
+    outline-offset: 2px;
+  }
+  
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 480px) {
+    .signup-container::before {
+      font-size: 20vw;
+    }
+    
+    .signup-card {
+      margin: 20px;
+      padding: 28px 20px;
+      max-width: calc(100vw - 40px);
+    }
+    
+    .brand-name {
+      font-size: 24px;
+      margin-bottom: 28px;
+    }
+    
+    .signup-title {
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .form-input, 
+    .submit-btn, 
+    .google-btn {
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 360px) {
+    .signup-container::before {
+      font-size: 25vw;
+    }
+    
+    .signup-card {
+      padding: 24px 18px;
+    }
+    
+    .brand-name {
+      font-size: 22px;
+    }
+    
+    .signup-title {
+      font-size: 22px;
+    }
+  }

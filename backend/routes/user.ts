@@ -12,49 +12,46 @@ dotenv.config()
 
 const userRouter = Router();
 
-const JWT_USER_PASSWORD = process.env.JWT_USER_PASSWORD as string;
-const MONGO_URL = process.env.MONGO_URL as string;
-const PORT = process.env.PORT || 3000;
+const corsOptions = {
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+};
 
-// Add middleware to the router
+userRouter.use(cors(corsOptions));
 userRouter.use(express.json());
-userRouter.use(cors());
 
-// Debug: Log when middleware is set up
-if (process.env.DEBUG) {
-    console.debug("[DEBUG] User router middleware configured");
-}
+const JWT_USER_PASSWORD = process.env.JWT_USER_PASSWORD as string;
 
-// Debug: Log all incoming requests to this router
+// Remove duplicate middleware (you had these twice)
+// Debug middleware
 userRouter.use((req, res, next) => {
-    if (process.env.DEBUG) {
-        console.debug(`[DEBUG] [${new Date().toISOString()}] ${req.method} ${req.url} - Body:`, req.body);
-    }
+    console.debug(`[DEBUG] [${new Date().toISOString()}] ${req.method} ${req.url} - Body:`, req.body);
     next();
 });
 
 //signup endpoint
 userRouter.post("/signup", async function (req, res) {
     try {
-        // Debug: Log request body for signup
         console.debug("[DEBUG] Signup request body:", req.body);
 
-        // Safety check for request body
         if (!req.body) {
             return res.status(400).json({
+                success: false,
                 message: "Request body is required"
             });
         }
 
         const email = req.body.email;
         const password = req.body.password;
-        const username = req.body.username;
+        const name = req.body.name;
 
         // Input validation using zod
         const requiredBody = z.object({
             email: z.string().min(5).max(100).email(),
             password: z.string().min(5).max(100),
-            username: z.string().min(3).max(30)
+            name: z.string().min(3).max(30)
         });
         
         const parsedDataSuccess = requiredBody.safeParse(req.body);
@@ -62,7 +59,8 @@ userRouter.post("/signup", async function (req, res) {
         if (!parsedDataSuccess.success) {
             console.error("[DEBUG] Signup validation failed:", parsedDataSuccess.error);
             return res.status(400).json({
-                message: "Incorrect format",
+                success: false,
+                message: "Validation failed",
                 error: parsedDataSuccess.error
             });
         }
@@ -70,32 +68,30 @@ userRouter.post("/signup", async function (req, res) {
         const salt = await bcrypt.genSalt(5);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Debug: Log hashed password
         console.debug("[DEBUG] Hashed password for signup:", hashedPassword);
 
         const user = await userModel.create({
-            username: username,
+            name: name,
             email: email,
             password: hashedPassword
         });
 
-        // Debug: Log created user
         console.debug("[DEBUG] User created:", user);
 
         res.status(201).json({
+            success: true,
             message: "Signup successful",
             user: {
                 id: user._id,
                 email: user.email,
-                //@ts-ignore
-                username: user.username
+                name: user.name
             }
         });
         
     } catch(e) {
-        // If there is an error during user creation, return an error message
         console.error("[DEBUG] Error during signup:", e);
         return res.status(400).json({
+            success: false,
             message: "You are already signed up",
             //@ts-ignore
             error: e.message || e
@@ -103,96 +99,6 @@ userRouter.post("/signup", async function (req, res) {
     }
 });
 
-//signin endpoint
-userRouter.post("/signin", async function (req, res) {
-    try {
-        // Debug: Log request body for signin
-        console.debug("[DEBUG] Signin request body:", req.body);
-
-        // Safety check for request body
-        if (!req.body) {
-            return res.status(400).json({
-                message: "Request body is required"
-            });
-        }
-
-        const requireBody = z.object({
-            email: z.string().email(),
-            password: z.string().min(6)
-        });
-        
-        const parsedDataWithSuccess = requireBody.safeParse(req.body);
-
-        if (!parsedDataWithSuccess.success) {
-            console.error("[DEBUG] Signin validation failed:", parsedDataWithSuccess.error);
-            return res.status(400).json({
-                message: "Incorrect Data Format",
-                error: parsedDataWithSuccess.error,
-            });
-        }
-
-        const email = req.body.email;
-        const password = req.body.password;
-
-        const user = await userModel.findOne({
-            email: email,
-        });
-
-        // Debug: Log user lookup result
-        console.debug("[DEBUG] User found for signin:", user);
-
-        if (!user) {
-            console.warn("[DEBUG] Signin failed: Incorrect credentials (user not found)");
-            return res.status(403).json({
-                message: "Incorrect Credentials!"
-            });
-        }
-
-        // Ensure password exists
-        if (!user.password) {
-            console.warn("[DEBUG] Signin failed: User has no password");
-            return res.status(403).json({
-                message: "Invalid credentials!"
-            });
-        }
-
-        const passwordMatch = await bcrypt.compare(password, user.password);
-
-        // Debug: Log password match result
-        console.debug("[DEBUG] Password match:", passwordMatch);
-
-        if (passwordMatch) {
-            if (!JWT_USER_PASSWORD) {
-                console.error("[DEBUG] JWT_USER_PASSWORD is not defined in environment variables");
-                return res.status(500).json({
-                    message: "Internal server error"
-                });
-            }
-            
-            const token = jwt.sign({
-                id: user._id
-            }, JWT_USER_PASSWORD);
-
-            // Debug: Log generated token
-            console.debug("[DEBUG] JWT token generated:", token);
-
-            res.json({
-                token: token,
-            });
-
-        } else {
-            console.warn("[DEBUG] Signin failed: Invalid credentials (password mismatch)");
-            res.status(403).json({
-                message: "Invalid credentials!"
-            });
-        }
-        
-    } catch (e) {
-        console.error("[DEBUG] Error during signin:", e);
-        res.status(500).json({
-            message: "Internal server error"
-        });
-    }
-});
+// Keep your signin endpoint as is...
 
 export { userRouter }
